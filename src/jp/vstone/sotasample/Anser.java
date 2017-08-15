@@ -94,7 +94,6 @@ public class Anser {
 							}
 						}
 						if (ran == 2) {
-							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("2"), true);
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("アンドロイドとアイフォンどっち使ってる？"), true);
 
 							String sumaho = recog.getResponse(15000, 3);
