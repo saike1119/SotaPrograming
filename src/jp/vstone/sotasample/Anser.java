@@ -26,17 +26,17 @@ public class Anser {
 
 			while (true) {
 				// ずっと「こんにちは」が言われるまでステイし続ける
-				String hello = recog.getResponse(100000000, 100000000);
-				if (hello.equals("こんにちは")) {
+				String hello = recog.getResponse(15000, 100000000);
+				if (hello.equals("こんにちは")||hello.equals("こんばんは")||hello.equals("おはよう")) {
 
-					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("こんにちは,そーたです！今からお話しようよ。"), true);
+					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(hello+",そーたです！今からお話しようよ。"), true);
 					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("まず、あなたのお名前はなんていうの？"), true);
 
 					// 話題の番号をランダムで生成する
 					Random rnd = new Random();
 					int ran = rnd.nextInt(3);
 
-					String name = recog.getName(0, 3);
+					String name = recog.getName(15000, 3);
 					if (name != null) {
 						CRobotUtil.Log(TAG, name);
 						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんっていうんだね。よろしくね。"), true);
@@ -85,10 +85,23 @@ public class Anser {
 							}
 						}
 						if (ran == 1) {
-							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("1"), true);
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("最近の芸能人って可愛い人が多いよね、誰が好きとかある？"), true);
+
+							String geinou = recog.getResponse(15000, 3);
+							if (geinou != null) {
+								CRobotUtil.Log(TAG, geinou);
+								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(geinou + "さんが好きなんだね。いいね！。"), true);
+							}
 						}
 						if (ran == 2) {
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("2"), true);
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("アンドロイドとアイフォンどっち使ってる？"), true);
+
+							String sumaho = recog.getResponse(15000, 3);
+							if (sumaho != null) {
+								CRobotUtil.Log(TAG, sumaho);
+								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(sumaho + "を使ってるんだね。いいね！"), true);
+							}
 						}
 						// 会話終了
 						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね"), true);
