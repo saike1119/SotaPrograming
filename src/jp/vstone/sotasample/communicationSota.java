@@ -9,7 +9,7 @@ import jp.vstone.RobotLib.CSotaMotion;
 import jp.vstone.sotatalk.SpeechRecog;
 import jp.vstone.sotatalk.TextToSpeechSota;
 
-public class Anser {
+public class communicationSota {
 	static final String TAG = "SpeechRecSample";
 
 	// private static final String ロ1 = null;
@@ -25,11 +25,11 @@ public class Anser {
 			motion.InitRobot_Sota();
 
 			while (true) {
-				// ずっと「こんにちは」が言われるまでステイし続ける
-				String hello = recog.getResponse(15000, 100000000);
-				if (hello.equals("こんにちは")||hello.equals("こんばんは")||hello.equals("おはよう")) {
+				// 指定の挨拶がされるまでステイし続ける
+				String hello = recog.getResponse(15000, 100);
+				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
 
-					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(hello+",そーたです！今からお話しようよ。"), true);
+					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(hello + ",そーたです！今からお話しようよ。"), true);
 					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("まず、あなたのお名前はなんていうの？"), true);
 
 					// 話題の番号をランダムで生成する
@@ -84,6 +84,7 @@ public class Anser {
 								}
 							}
 						}
+						// TODO:開発途中の話題
 						if (ran == 1) {
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("最近の芸能人って可愛い人が多いよね、誰が好きとかある？"), true);
 
@@ -93,6 +94,7 @@ public class Anser {
 								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(geinou + "さんが好きなんだね。いいね！。"), true);
 							}
 						}
+						// TODO:開発途中の話題
 						if (ran == 2) {
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("アンドロイドとアイフォンどっち使ってる？"), true);
 
@@ -104,7 +106,6 @@ public class Anser {
 						}
 						// 会話終了
 						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね"), true);
-						// break;
 					}
 				}
 			}
