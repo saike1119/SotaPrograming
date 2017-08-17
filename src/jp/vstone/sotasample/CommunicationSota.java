@@ -9,7 +9,7 @@ import jp.vstone.RobotLib.CSotaMotion;
 import jp.vstone.sotatalk.SpeechRecog;
 import jp.vstone.sotatalk.TextToSpeechSota;
 
-public class communicationSota {
+public class CommunicationSota {
 	static final String TAG = "SpeechRecSample";
 
 	// private static final String ロ1 = null;
