@@ -86,12 +86,12 @@ public class CommunicationSota {
 						}
 						// TODO:開発途中の話題
 						if (ran == 1) {
-							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("最近の芸能人って可愛い人が多いよね、誰が好きとかある？"), true);
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("最近はちゃんと寝てる？？"), true);
 
 							String geinou = recog.getResponse(15000, 3);
 							if (geinou != null) {
 								CRobotUtil.Log(TAG, geinou);
-								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(geinou + "さんが好きなんだね。いいね！。"), true);
+								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("夜はちゃんと寝たほうがいいいよ〜。おやすみ！"), true);
 							}
 						}
 						// TODO:開発途中の話題
