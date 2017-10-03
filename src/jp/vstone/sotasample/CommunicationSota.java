@@ -111,11 +111,10 @@ public class CommunicationSota {
 								}
 							}
 
-							// おみくじ
+							// TODO:おみくじ
 						}
 						if (select.equals("おみくじ")) {
-							String word1 = "おはよー";
-							talkSota(word1);
+							talkSota("おみくじは実装中だよ！待ってね！");
 						}
 						// 会話終了
 						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね"), true);
@@ -126,6 +125,7 @@ public class CommunicationSota {
 		}
 	}
 
+	//おしゃべり機能
 	public static String talkSota(String word) {
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(word), true);
 		return word;
