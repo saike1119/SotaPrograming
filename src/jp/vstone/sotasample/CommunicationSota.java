@@ -29,7 +29,7 @@ public class CommunicationSota {
 				String hello = recog.getResponse(15000, 100);
 				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
 
-					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(hello + ",そーたです！今からお話しようよ。"), true);
+					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(hello + ",そーたです！"), true);
 					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("まず、あなたのお名前はなんていうの？"), true);
 
 					// 話題の番号をランダムで生成する
@@ -39,8 +39,13 @@ public class CommunicationSota {
 					String name = recog.getName(15000, 3);
 					if (name != null) {
 						CRobotUtil.Log(TAG, name);
-						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんっていうんだね。よろしくね。"), true);
+						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんっていうんだね。よろしくね！"), true);
+						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりとおみくじができるけど、どっちをしたいかな〜？"), true);
 
+						//おしゃべりかおみくじか分岐選択
+						String select = recog.getResponse(15000, 100);
+						if (select.equals("おしゃべり")) {
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おしゃべりしよう！僕が質問するね！"), true);
 						if (ran == 0) {
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ちなみに焼肉と寿司、どっちが好き？"), true);
 							String food = recog.getResponse(15000, 3);
@@ -104,11 +109,22 @@ public class CommunicationSota {
 								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(sumaho + "を使ってるんだね。いいね！"), true);
 							}
 						}
+						
+						//おみくじ
+						}if (select.equals("おみくじ")) {
+							String aaaa = "おはよおおお";
+							sampleMethod(aaaa);
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(sampleMethod(aaaa)), true);
+						}
 						// 会話終了
-						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね"), true);
+						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね!!"), true);
 					}
 				}
+
 			}
 		}
+	}
+	public static String sampleMethod(String aaaa){
+		return aaaa;
 	}
 }
