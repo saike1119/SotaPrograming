@@ -42,79 +42,80 @@ public class CommunicationSota {
 						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんっていうんだね。よろしくね！"), true);
 						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりとおみくじができるけど、どっちをしたいかな〜？"), true);
 
-						//おしゃべりかおみくじか分岐選択
+						// おしゃべりかおみくじか分岐選択
 						String select = recog.getResponse(15000, 100);
 						if (select.equals("おしゃべり")) {
-							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おしゃべりしよう！僕が質問するね！"), true);
-						if (ran == 0) {
-							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ちなみに焼肉とお寿司、どっちが好き？"), true);
-							String food = recog.getResponse(15000, 3);
-							// 焼肉か寿司か分岐点
-							if (food != null) {
-								CRobotUtil.Log(TAG, food);
-								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんは" + food + "が好きなんだね"), true);
-								// 寿司ルート
-								if (food.equals("お寿司") || food.equals("おすし")) {
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おしゃべりしよう！僕が聞きたいこと聞くね〜"), true);
+							if (ran == 0) {
+								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ちなみに焼肉とお寿司、どっちが好き？"), true);
+								String food = recog.getResponse(15000, 3);
+								// 焼肉か寿司か分岐点
+								if (food != null) {
 									CRobotUtil.Log(TAG, food);
-									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕もだよ、お寿司美味しいよね〜"), true);
-									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("マグロかシメサバだったらどっちが好き？"), true);
-									String neta = recog.getResponse(15000, 3);
-									// ネタ分岐
-									if (food.equals("マグロ")) {
-										CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("王道だね！"), true);
-										CRobotUtil.Log(TAG, neta);
-									}
-									if (food.equals("しめさば")) {
-										CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("渋いね〜"), true);
-										CRobotUtil.Log(TAG, neta);
+									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんは" + food + "が好きなんだね"),
+											true);
+									// 寿司ルート
+									if (food.equals("お寿司") || food.equals("おすし")) {
+										CRobotUtil.Log(TAG, food);
+										CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕もだよ、お寿司美味しいよね〜"), true);
+										CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("マグロかシメサバだったらどっちが好き？"), true);
+										String neta = recog.getResponse(15000, 3);
+										// ネタ分岐
+										if (food.equals("マグロ")) {
+											CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("王道だね！"), true);
+											CRobotUtil.Log(TAG, neta);
+										}
+										if (food.equals("しめさば")) {
+											CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("渋いね〜"), true);
+											CRobotUtil.Log(TAG, neta);
+										} else {
+											CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("それも美味しそうだね"), true);
+											CRobotUtil.Log(TAG, neta);
+										}
+
+										// 焼肉ルート
+									} else if (food.equals("焼肉")) {
+										CRobotUtil.Log(TAG, food);
+										CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("焼肉いいよね"), true);
+										CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("茅ヶ崎駅に、ざんまいっていう美味しい焼肉屋さんがあるよ"),
+												true);
+										CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ぜひ、行ってみて！"), true);
+
+										// そのほかの食べ物を答えたとき
 									} else {
-										CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("それも美味しそうだね"), true);
-										CRobotUtil.Log(TAG, neta);
+										CRobotUtil.Log(TAG, food);
+										CPlayWave.PlayWave(
+												TextToSpeechSota.getTTSFile(food + "って食べ物があるの知らなかったよ、美味しそうだね。"), true);
+										CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ありがとう！"), true);
 									}
-
-									// 焼肉ルート
-								} else if (food.equals("焼肉")) {
-									CRobotUtil.Log(TAG, food);
-									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("焼肉いいよね"), true);
-									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("茅ヶ崎駅に、ざんまいっていう美味しい焼肉屋さんがあるよ"),
-											true);
-									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ぜひ、行ってみて！"), true);
-
-									// そのほかの食べ物を答えたとき
-								} else {
-									CRobotUtil.Log(TAG, food);
-									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(food + "って食べ物があるの知らなかったよ、美味しそうだね。"),
-											true);
-									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ありがとう！"), true);
 								}
 							}
-						}
-						// TODO:開発途中の話題
-						if (ran == 1) {
-							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("最近はちゃんと寝てる？？"), true);
+							// TODO:開発途中の話題
+							if (ran == 1) {
+								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("最近はちゃんと寝てる？？"), true);
 
-							String geinou = recog.getResponse(15000, 3);
-							if (geinou != null) {
-								CRobotUtil.Log(TAG, geinou);
-								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("夜はちゃんと寝たほうがいいいよ〜。おやすみ！"), true);
+								String geinou = recog.getResponse(15000, 3);
+								if (geinou != null) {
+									CRobotUtil.Log(TAG, geinou);
+									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("夜はちゃんと寝たほうがいいいよ〜。おやすみ！"), true);
+								}
 							}
-						}
-						// TODO:開発途中の話題
-						if (ran == 2) {
-							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("アンドロイドとアイフォンどっち使ってる？"), true);
+							// TODO:開発途中の話題
+							if (ran == 2) {
+								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("アンドロイドとアイフォンどっち使ってる？"), true);
 
-							String sumaho = recog.getResponse(15000, 3);
-							if (sumaho != null) {
-								CRobotUtil.Log(TAG, sumaho);
-								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(sumaho + "を使ってるんだね。いいね！"), true);
+								String sumaho = recog.getResponse(15000, 3);
+								if (sumaho != null) {
+									CRobotUtil.Log(TAG, sumaho);
+									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(sumaho + "を使ってるんだね。いいね！"), true);
+								}
 							}
-						}
 
-						//おみくじ
-						}if (select.equals("おみくじ")) {
-							String aaaa = "おはよおおお";
-							sampleMethod(aaaa);
-							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(sampleMethod(aaaa)), true);
+							// おみくじ
+						}
+						if (select.equals("おみくじ")) {
+							String word1 = "おはよー";
+							talkSota(word1);
 						}
 						// 会話終了
 						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね"), true);
@@ -124,7 +125,9 @@ public class CommunicationSota {
 			}
 		}
 	}
-	public static String sampleMethod(String aaaa){
-		return aaaa;
+
+	public static String talkSota(String word) {
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(word), true);
+		return word;
 	}
 }
