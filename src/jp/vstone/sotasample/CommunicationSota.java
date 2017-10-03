@@ -29,7 +29,7 @@ public class CommunicationSota {
 				String hello = recog.getResponse(15000, 100);
 				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
 
-					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(hello + ",そーたです！"), true);
+					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(hello + "、そーたです！"), true);
 					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("まず、あなたのお名前はなんていうの？"), true);
 
 					// 話題の番号をランダムで生成する
@@ -47,14 +47,14 @@ public class CommunicationSota {
 						if (select.equals("おしゃべり")) {
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おしゃべりしよう！僕が質問するね！"), true);
 						if (ran == 0) {
-							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ちなみに焼肉と寿司、どっちが好き？"), true);
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ちなみに焼肉とお寿司、どっちが好き？"), true);
 							String food = recog.getResponse(15000, 3);
 							// 焼肉か寿司か分岐点
 							if (food != null) {
 								CRobotUtil.Log(TAG, food);
 								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんは" + food + "が好きなんだね"), true);
 								// 寿司ルート
-								if (food.equals("寿司") || food.equals("おすし")) {
+								if (food.equals("お寿司") || food.equals("おすし")) {
 									CRobotUtil.Log(TAG, food);
 									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕もだよ、お寿司美味しいよね〜"), true);
 									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("マグロかシメサバだったらどっちが好き？"), true);
@@ -109,7 +109,7 @@ public class CommunicationSota {
 								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(sumaho + "を使ってるんだね。いいね！"), true);
 							}
 						}
-						
+
 						//おみくじ
 						}if (select.equals("おみくじ")) {
 							String aaaa = "おはよおおお";
@@ -117,7 +117,7 @@ public class CommunicationSota {
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(sampleMethod(aaaa)), true);
 						}
 						// 会話終了
-						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね!!"), true);
+						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね"), true);
 					}
 				}
 
