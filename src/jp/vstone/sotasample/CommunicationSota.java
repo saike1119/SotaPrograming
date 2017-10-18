@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -323,5 +324,23 @@ public class CommunicationSota {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(wav_file), true);
 			// CPlayWave.PlayWave_wait(wav_file);
 		}
+	}
+
+	public static void getText() throws UnsupportedEncodingException {
+		String getText_url = "http://133.130.107.245/temp.txt"; // .txt以外にPHPやRubyなどでもOK（一行でUTF-8のテキストが返ってくれば，なんでも可）
+		String speech_text = "テキスト取得，エラーです";
+
+		speech_text = getStringByCallGET(getText_url); // ローカルでのテキスト取得も可能ですが，Sota側の計算能力は貧弱です
+		String textStr = URLEncoder.encode(speech_text, "utf-8");
+		// 音声ファイルが取得できたら音声ファイルを再生（再生し，再生終了まで待つ）
+		if (isset(textStr)) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(textStr), true);
+			// CPlayWave.PlayWave_wait(wav_file);
+		}
+	}
+
+	private static boolean isset(String textStr) {
+		// TODO 自動生成されたメソッド・スタブ
+		return false;
 	}
 }
