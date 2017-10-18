@@ -19,6 +19,8 @@ public class CommunicationSota {
 	// ランダムな数をインスタンス化
 	private static Random rnd = new Random();
 
+	// private static final String ロ1 = null;
+	// private static String ;
 	public static void main(String[] args) {
 
 		// 話題の番号をランダムで生成する
@@ -154,7 +156,7 @@ public class CommunicationSota {
 
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おみくじだね！"), true);
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("今からおみくじを僕の中で引くね！いいものが当たるといいね"), true);
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ガラララララ、ダン！"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ガララララララララララララララララララ、ダン！"), true);
 
 		if (ranOmi >= 80) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("飴玉が当たったよ！"), true);
