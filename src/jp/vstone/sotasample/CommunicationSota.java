@@ -11,22 +11,22 @@ import jp.vstone.sotatalk.TextToSpeechSota;
 
 public class CommunicationSota {
 	static final String TAG = "SpeechRecSample";
+	// VSMDと通信ソケット・メモリアクセス用クラス
+	private static CRobotMem mem = new CRobotMem();
+	private static CSotaMotion motion = new CSotaMotion(mem);
+	// Sota用モーション制御クラス
+	private static SpeechRecog recog = new SpeechRecog(motion);
 
 	// private static final String ロ1 = null;
 	// private static String ;
 	public static void main(String[] args) {
-		// VSMDと通信ソケット・メモリアクセス用クラス
-		CRobotMem mem = new CRobotMem();
-		// Sota用モーション制御クラス
-		CSotaMotion motion = new CSotaMotion(mem);
-		SpeechRecog recog = new SpeechRecog(motion);
 		if (mem.Connect()) {
 			// Sota仕様にVSMDを初期化
 			motion.InitRobot_Sota();
 
 			while (true) {
 				// 指定の挨拶がされるまでステイし続ける
-				String hello = recog.getResponse(15000, 100);
+				String hello = recog.getResponse(15000, 1000);
 				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
 
 					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(hello + "、そーたです！"), true);
@@ -34,7 +34,7 @@ public class CommunicationSota {
 
 					// 話題の番号をランダムで生成する
 					Random rnd = new Random();
-					int ran = rnd.nextInt(3);
+					int ran = rnd.nextInt(3) + 1;
 
 					String name = recog.getName(15000, 3);
 					if (name != null) {
@@ -111,16 +111,17 @@ public class CommunicationSota {
 									CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(sumaho + "を使ってるんだね。いいね！"), true);
 								}
 							}
-
-							// おみくじ
 						}
+						// おみくじ
 						if (select.equals("おみくじ")) {
 							// 確率をランダムで生成する
 							int ranOmi = rnd.nextInt(100);
+							// 確率表示
+							System.out.println(ranOmi);
 
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おみくじだね！"), true);
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("今からおみくじを僕の中で引くね！いいものが当たるといいね"), true);
-							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ガララララララララララララララララララ"), true);
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ガララララララララララララララララララ、ダン！"), true);
 
 							omikuziSota(ranOmi);
 
@@ -129,10 +130,8 @@ public class CommunicationSota {
 						}
 						// 会話終了
 						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね"), true);
-
 					}
 				}
-
 			}
 		}
 	}
@@ -147,4 +146,13 @@ public class CommunicationSota {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("エンゼルパイが当たったよ！"), true);
 		}
 	}
+	// TODO:開発途中のファンクション
+	public static void wadai3() {
+		String sumaho = recog.getResponse(15000, 3);
+		if (sumaho != null) {
+			CRobotUtil.Log(TAG, sumaho);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(sumaho + "を使ってるんだね。いいね！"), true);
+		}
+	}
+
 }
