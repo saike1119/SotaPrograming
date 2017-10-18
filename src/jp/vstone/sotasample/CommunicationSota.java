@@ -1,5 +1,10 @@
 package jp.vstone.sotasample;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Random;
 
 import jp.vstone.RobotLib.CPlayWave;
@@ -140,7 +145,9 @@ public class CommunicationSota {
 		}
 	}
 
-	// おみくじ機能
+	/*
+	 * 確率でおみくじをする
+	 */
 	public static void omikuziSota() {
 		// 確率をランダムで生成する
 		int ran = rnd.nextInt(100) + 1;
@@ -164,5 +171,60 @@ public class CommunicationSota {
 
 	public static void finishCommunication() {
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあ、またね〜〜〜！"), true);
+	}
+
+	/*
+	 * Webサーバにアクセスしてテキスト(String)をGETで取得する処理 ※以下の参考サイトのコードを一部改変
+	 * http://web.plus-idea.net/2016/08/httpurlconnection-post-get-proxy-sample/
+	 */
+	public static String getStringByCallGET(String strGetUrl) {
+
+		HttpURLConnection con = null;
+		StringBuffer result = new StringBuffer();
+
+		try {
+
+			URL url = new URL(strGetUrl);
+
+			con = (HttpURLConnection) url.openConnection();
+
+			con.setRequestMethod("GET");
+			con.connect(); // URLにGETでリクエストを送信
+
+			// HTTPレスポンスコード
+			final int status = con.getResponseCode();
+			if (status == HttpURLConnection.HTTP_OK) {
+				// 通信に成功した
+				// テキストを取得する
+				final InputStream in = con.getInputStream();
+				String encoding = con.getContentEncoding();
+				if (null == encoding) {
+					encoding = "UTF-8";
+				}
+				final InputStreamReader inReader = new InputStreamReader(in, encoding);
+				final BufferedReader bufReader = new BufferedReader(inReader);
+				String line = null;
+				// 1行ずつテキストを読み込む
+				while ((line = bufReader.readLine()) != null) {
+					result.append(line);
+				}
+				bufReader.close();
+				inReader.close();
+				in.close();
+			} else {
+				// System.out.println(status);
+			}
+
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} finally {
+			if (con != null) {
+				// コネクションを切断
+				con.disconnect();
+			}
+		}
+		// System.out.println("result=" + result.toString());
+
+		return result.toString();
 	}
 }
