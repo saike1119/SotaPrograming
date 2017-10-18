@@ -46,6 +46,7 @@ public class CommunicationSota {
 						String select = recog.getResponse(15000, 100);
 						if (select.equals("おしゃべり")) {
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おしゃべりしよう！僕が聞きたいこと聞くね〜"), true);
+							// TODO:開発途中の話題
 							if (ran == 0) {
 								CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ちなみに焼肉とお寿司、どっちが好き？"), true);
 								String food = recog.getResponse(15000, 3);
@@ -114,10 +115,21 @@ public class CommunicationSota {
 							// TODO:おみくじ
 						}
 						if (select.equals("おみくじ")) {
-							talkSota("おみくじは実装中だよ！待ってね！");
+							// 話題の番号をランダムで生成する
+							int ranOmi = rnd.nextInt(100);
+
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おみくじだね！"), true);
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("今からおみくじを僕の中で引くね！いいものが当たるといいね"), true);
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ガララララララララララララララララララ"), true);
+
+							omikuziSota(ranOmi);
+
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おめでとう〜〜！また来年も来てね"), true);
+
 						}
 						// 会話終了
 						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね"), true);
+
 					}
 				}
 
@@ -125,17 +137,14 @@ public class CommunicationSota {
 		}
 	}
 
-	// おしゃべり機能
-	public static String talkSota(String word) {
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(word), true);
-		return word;
-	}
-
-	public static String helloSota(String hello) {
-		if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
-
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(hello + "、そーたです！"), true);
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("まず、あなたのお名前はなんていうの？"), true);
+	// おみくじ機能
+	public static void omikuziSota(int ranOmi) {
+		if (ranOmi >= 80) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("飴玉が当たったよ！"), true);
+		} else if (ranOmi < 80 && ranOmi >= 95) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("うまい棒が当たったよ！"), true);
+		} else if (ranOmi < 95 && ranOmi >= 100) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("エンゼルパイが当たったよ！"), true);
 		}
 	}
 }
