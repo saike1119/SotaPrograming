@@ -16,13 +16,12 @@ public class CommunicationSota {
 	private static CSotaMotion motion = new CSotaMotion(mem);
 	// Sota用モーション制御クラス
 	private static SpeechRecog recog = new SpeechRecog(motion);
+	// ランダムな数をインスタンス化
+	private static Random rnd = new Random();
 
-	// private static final String ロ1 = null;
-	// private static String ;
 	public static void main(String[] args) {
 
 		// 話題の番号をランダムで生成する
-		Random rnd = new Random();
 		int ran = rnd.nextInt(3) + 1;
 
 		if (mem.Connect()) {
@@ -34,13 +33,11 @@ public class CommunicationSota {
 				String hello = recog.getResponse(15000, 1000);
 				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
 
-					helloSota(hello);
+					helloQuestionSota(hello);
 
 					String name = recog.getName(15000, 3);
 					if (name != null) {
-						CRobotUtil.Log(TAG, name);
-						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんっていうんだね。よろしくね！"), true);
-						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりとおみくじができるけど、どっちをしたいかな〜？"), true);
+						helloNameSota(name);
 
 						// おしゃべりかおみくじか分岐選択
 						String select = recog.getResponse(15000, 100);
@@ -61,11 +58,7 @@ public class CommunicationSota {
 						}
 						// おみくじ
 						if (select.equals("おみくじ")) {
-							// 確率をランダムで生成する
-							int ranOmi = rnd.nextInt(100);
-							// 確率表示
-							System.out.println(ranOmi);
-							omikuziSota(ranOmi);
+							omikuziSota();
 						}
 						// 会話終了
 						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね"), true);
@@ -75,9 +68,16 @@ public class CommunicationSota {
 		}
 	}
 
-	public static void helloSota(String hello) {
+	// functions
+	public static void helloQuestionSota(String hello) {
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(hello + "、そーたです！"), true);
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("まず、あなたのお名前はなんていうの？"), true);
+	}
+
+	public static void helloNameSota(String name) {
+		CRobotUtil.Log(TAG, name);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんっていうんだね。よろしくね！"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりとおみくじができるけど、どっちをしたいかな〜？"), true);
 	}
 
 	// TODO:開発途中のファンクション
@@ -146,10 +146,15 @@ public class CommunicationSota {
 	}
 
 	// おみくじ機能
-	public static void omikuziSota(int ranOmi) {
+	public static void omikuziSota() {
+		// 確率をランダムで生成する
+		int ranOmi = rnd.nextInt(100);
+		// 出た数を表示
+		System.out.println(ranOmi);
+
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おみくじだね！"), true);
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("今からおみくじを僕の中で引くね！いいものが当たるといいね"), true);
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ガララララララララララララララララララ、ダン！"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ガラララララ、ダン！"), true);
 
 		if (ranOmi >= 80) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("飴玉が当たったよ！"), true);
