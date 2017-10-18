@@ -34,7 +34,7 @@ public class CommunicationSota {
 					String name = recog.getName(15000, 3);
 					if (name != null) {
 						helloNameSota(name);
-						// おしゃべりかおみくじか分岐選択
+						// おしゃべりかおみくじを分岐選択
 						String select = recog.getResponse(15000, 100);
 						if (select.equals("おしゃべり")) {
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おしゃべりしよう！僕が聞きたいこと聞くね〜"), true);
@@ -152,17 +152,17 @@ public class CommunicationSota {
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ガララララララララララララララララララ、ダン！"), true);
 
 		if (ran >= 80) {
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("飴玉が当たったよ！"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("飴ちゃんが当たったよ！"), true);
 		} else if (ran < 80 && ran >= 95) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("うまい棒が当たったよ！"), true);
 		} else if (ran < 95 && ran >= 100) {
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("エンゼルパイが当たったよ！"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("大当たり！チョコボールが当たったよ！"), true);
 		}
 
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おめでとう〜〜！また来年も来てね"), true);
 	}
 
 	public static void finishCommunication() {
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあまたね"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあ、またね〜〜〜！"), true);
 	}
 }
