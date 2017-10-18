@@ -1,6 +1,8 @@
 package jp.vstone.sotasample;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -171,6 +173,61 @@ public class CommunicationSota {
 
 	public static void finishCommunication() {
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあ、またね〜〜〜！"), true);
+	}
+
+	/*
+	 * POSTにより音声合成サーバでWAVファイルを作成するための処理
+	 */
+	public static boolean getWavFileByCallGET(String strPostUrl, String param, String target) {
+
+		HttpURLConnection con = null;
+
+		try {
+
+			URL url = new URL(strPostUrl + "?" + param);
+			// System.out.println(url.toString());
+
+			InputStream in = null;
+
+			con = (HttpURLConnection) url.openConnection();
+			con.setDoOutput(true);
+			con.setRequestMethod("GET");
+
+			con.connect(); // URLに文字列パラメータを追加してGETでリクエストを送信
+
+			// HTTPレスポンスコードを取得
+			final int status = con.getResponseCode();
+			if (status == HttpURLConnection.HTTP_OK) { // 通信に成功した
+				// バイナリファイルとしての保存
+				in = con.getInputStream();
+				if (in != null) {
+					// バイナリ形式でファイルを保存
+					FileOutputStream fos = new FileOutputStream(new File(target));
+					int line = -1;
+
+					while ((line = in.read()) != -1) {
+						fos.write(line);
+					}
+					in.close();
+					fos.close();
+				}
+
+			} else {
+				System.out.println(con.getResponseMessage());
+				return false;
+			}
+
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} finally {
+			if (con != null) {
+				// コネクションを切断
+				con.disconnect();
+			}
+		}
+
+		return true;
+
 	}
 
 	/*
