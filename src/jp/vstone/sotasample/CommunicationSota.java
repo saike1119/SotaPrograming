@@ -125,9 +125,17 @@ public class CommunicationSota {
 		}
 	}
 
-	//おしゃべり機能
+	// おしゃべり機能
 	public static String talkSota(String word) {
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(word), true);
 		return word;
+	}
+
+	public static String helloSota(String hello) {
+		if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
+
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(hello + "、そーたです！"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("まず、あなたのお名前はなんていうの？"), true);
+		}
 	}
 }
