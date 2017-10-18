@@ -112,10 +112,10 @@ public class CommunicationSota {
 								}
 							}
 
-							// TODO:おみくじ
+							// おみくじ
 						}
 						if (select.equals("おみくじ")) {
-							// 話題の番号をランダムで生成する
+							// 確率をランダムで生成する
 							int ranOmi = rnd.nextInt(100);
 
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おみくじだね！"), true);
