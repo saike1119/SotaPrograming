@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Random;
 
 import jp.vstone.RobotLib.CPlayWave;
@@ -25,6 +26,9 @@ public class CommunicationSota {
 	private static SpeechRecog recog = new SpeechRecog(motion);
 	// ランダムな数をインスタンス化
 	private static Random rnd = new Random();
+	// 話す内容のファイルを定義
+	private static final String wav_file = "./temp.wav";
+	private static boolean isGetWavFile = false;
 
 	// メイン
 	public static void main(String[] args) {
@@ -63,6 +67,8 @@ public class CommunicationSota {
 							omikuziSota();
 						}
 						// 会話終了
+						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("テストでちょっと喋ります。"), true);
+						connectionHTTP();
 						finishCommunication();
 					}
 				}
@@ -283,5 +289,39 @@ public class CommunicationSota {
 		// System.out.println("result=" + result.toString());
 
 		return result.toString();
+	}
+
+	public static void connectionHTTP() {
+		try {
+			// しゃべる内容をサーバ側のテキストファイルから取得
+			// String getText_url = "http://172.20.5.58/~b4p31047/temp.txt";
+			// .txt以外にPHPやRubyなどでもOK（一行でUTF-8のテキストが返ってくれば，なんでも可）
+			String getText_url = "http://133.130.107.245/temp.txt"; // .txt以外にPHPやRubyなどでもOK（一行でUTF-8のテキストが返ってくれば，なんでも可）
+			String speech_text = "テキスト取得，エラーです";
+
+			speech_text = getStringByCallGET(getText_url); // ローカルでのテキスト取得も可能ですが，Sota側の計算能力は貧弱です
+
+			// String TTS_url =
+			// "http://172.20.5.58/~hidenao/tts_voice_text.php";
+			// VoiceTextを実行するPHPスクリプトのURL
+			String TTS_url = "http://133.130.107.245/tts_voice_text.php"; // VoiceTextを実行するPHPスクリプトのURL
+			// String HTTP_contentType = "application/x-www-form-urlencoded;";
+			String encodeStr = URLEncoder.encode(speech_text, "utf-8");
+
+			// emotion, emotion_level, speakerなどのパラメータを事前に用意して変更することもできる
+
+			String param = "method=post&emotion=happiness&emotion_level=2&speaker=hikari&text=" + encodeStr; // VoiceTextにPOSTする各種パラメータを設定
+			// GETでVoice Text Web
+			// APIを利用するPHPスクリプトにアクセス（通常はリクエスト文字列長8KBまでのためPOSTへの変更も可能）
+			isGetWavFile = getWavFileByCallGET(TTS_url, param, wav_file);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 音声ファイルが取得できたら音声ファイルを再生（再生し，再生終了まで待つ）
+		if (isGetWavFile) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(wav_file), true);
+			// CPlayWave.PlayWave_wait(wav_file);
+		}
 	}
 }
