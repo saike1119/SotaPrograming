@@ -29,8 +29,6 @@ public class CommunicationSota {
 	private static CSotaMotion motion = new CSotaMotion(mem);
 	// Sota用モーション制御クラス
 	private static SpeechRecog recog = new SpeechRecog(motion);
-	// ランダムな数をインスタンス化
-	private static Random rnd = new Random();
 	// 話す内容のファイルを定義
 	private static final String wav_file = "./temp.wav";
 	private static boolean isGetWavFile = false;
@@ -40,52 +38,52 @@ public class CommunicationSota {
 
 		MotionAsSotaWish sotawish;
 		CRobotPose pose;
-		//VSMDと通信ソケット・メモリアクセス用クラス
+		// VSMDと通信ソケット・メモリアクセス用クラス
 		CRobotMem mem = new CRobotMem();
-		//Sota用モーション制御クラス
+		// Sota用モーション制御クラス
 		CSotaMotion motion = new CSotaMotion(mem);
 		CRoboCamera cam = new CRoboCamera("/dev/video0", motion);
 		sotawish = new MotionAsSotaWish(motion);
 
 		SpeechRecog speechrec = new SpeechRecog(motion);
 
-		//Sota仕様にVSMDを初期化
+		// Sota仕様にVSMDを初期化
 		motion.InitRobot_Sota();
 
 		CRobotUtil.Log(TAG, "Rev. " + mem.FirmwareRev.get());
 
-		//サーボモータを現在位置でトルクOnにする
+		// サーボモータを現在位置でトルクOnにする
 		CRobotUtil.Log(TAG, "Servo On");
 		motion.ServoOn();
 
-		//すべての軸を動作
+		// すべての軸を動作
 		pose = new CRobotPose();
-		pose.SetPose(new Byte[] {1   ,2   ,3   ,4   ,5   ,6   ,7   ,8}	//id
-		,  new Short[]{0   ,-900,0   ,900 ,0   ,0   ,0   ,0}				//target pos
-				);
-		//LEDを点灯（左目：赤、右目：赤、口：Max、電源ボタン：赤）
+		pose.SetPose(new Byte[] { 1, 2, 3, 4, 5, 6, 7, 8 } // id
+				, new Short[] { 0, -900, 0, 900, 0, 0, 0, 0 } // target pos
+		);
+		// LEDを点灯（左目：赤、右目：赤、口：Max、電源ボタン：赤）
 		pose.setLED_Sota(Color.BLUE, Color.BLUE, 255, Color.GREEN);
 
 		motion.play(pose, 500);
 		CRobotUtil.wait(500);
 
-		//笑顔推定有効
+		// 笑顔推定有効
 		cam.setEnableSmileDetect(true);
-		//顔検索有効
+		// 顔検索有効
 		cam.setEnableFaceSearch(true);
-		//フェイストラッキング開始
+		// フェイストラッキング開始
 		cam.StartFaceTraking();
 
 		int detectcnt = 0;
 		// 話題の番号をランダムで生成する
+		Random rnd = new Random();
 		int ran = rnd.nextInt(3) + 1;
 		if (mem.Connect()) {
 			FaceDetectResult result = cam.getDetectResult();
 
-			if(result.isDetect()){
+			if (result.isDetect()) {
 				detectcnt++;
-			}
-			else{
+			} else {
 				detectcnt = 0;
 			}
 			// Sota仕様にVSMDを初期化
@@ -94,7 +92,7 @@ public class CommunicationSota {
 				// 指定の挨拶がされるまでステイし続ける
 				String hello = recog.getResponse(15000, 1000);
 				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
-//					CRobotUtil.Log(TAG, "[Not Detect]");
+					// CRobotUtil.Log(TAG, "[Not Detect]");
 					pose.setLED_Sota(Color.BLUE, Color.BLUE, 255, Color.GREEN);
 					motion.play(pose, 500);
 					helloQuestionSota(hello);
@@ -215,6 +213,7 @@ public class CommunicationSota {
 	 */
 	public static void omikuziSota() {
 		// 確率をランダムで生成する
+        Random rnd = new Random();
 		int ran = rnd.nextInt(100) + 1;
 		// 出た数を表示
 		System.out.println(ran);
@@ -225,10 +224,9 @@ public class CommunicationSota {
 
 		if (ran >= 33) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("飴ちゃんが当たったよ！"), true);
-		}else if(ran < 33 && ran >= 66) {
+		} else if (ran < 33 && ran >= 66) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("うまい棒が当たったよ！"), true);
-		}
-		else if (ran < 66 && ran >= 100) {
+		} else if (ran < 66 && ran >= 100) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("大当たり！チョコボールが当たったよ！"), true);
 		}
 
