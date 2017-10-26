@@ -390,4 +390,8 @@ public class CommunicationSota {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(speech_text), true);
 		}
 	}
+
+	public static void songSota() {
+		CPlayWave.PlayWave("./sound/song.wav");
+	}
 }
