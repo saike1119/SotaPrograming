@@ -222,12 +222,12 @@ public class CommunicationSota {
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("今からおみくじを僕の中で引くね！いいものが当たるといいね"), true);
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ガララララララララララララララララララ、ダン！"), true);
 
-		if (ran >= 33) {
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("飴ちゃんが当たったよ！"), true);
-		} else if (ran < 33 && ran >= 66) {
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("うまい棒が当たったよ！"), true);
-		} else if (ran < 66 && ran >= 100) {
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("大当たり！チョコボールが当たったよ！"), true);
+		if (ran >= 80) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("吉"), true);
+		} else if (ran < 80 && ran >= 95) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("凶"), true);
+		} else if (ran < 95 && ran >= 100) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("大吉"), true);
 		}
 
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おめでとう〜〜！また来年も来てね"), true);
