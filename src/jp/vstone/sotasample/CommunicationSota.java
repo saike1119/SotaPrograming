@@ -36,7 +36,8 @@ public class CommunicationSota {
 
 		while (true) {
 			// 指定の挨拶がされるまでステイし続ける
-			String hello = recog.getResponse(15000, 1000);
+			rndHelloSota();
+			String hello = recog.getResponse(15000, 10);
 			if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
 				helloQuestionSota(hello);
 				String name = recog.getName(15000, 3);
@@ -63,10 +64,11 @@ public class CommunicationSota {
 					if (select.equals("おみくじ")) {
 						omikuziSota();
 					}
+					// おみくじ
+					if (select.equals("歌") || select.equals("うた") || select.equals("お歌") || select.equals("おうた")) {
+						songSota();
+					}
 					// 会話終了
-					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("テストでちょっと喋ります。"), true);
-					getTextSpeech();
-					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("普通に喋ります。"), true);
 					finishCommunication();
 				}
 			}
@@ -82,7 +84,7 @@ public class CommunicationSota {
 	public static void helloNameSota(String name) {
 		CRobotUtil.Log(TAG, name);
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんっていうんだね。よろしくね！"), true);
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりとおみくじができるけど、どっちをしたいかな〜？"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりとおみくじと歌が歌えるけどできるけど、何したらいいかな？"), true);
 	}
 
 	// TODO:開発途中のファンクション
@@ -335,5 +337,8 @@ public class CommunicationSota {
 
 	public static void songSota() {
 		CPlayWave.PlayWave("./sound/song.wav");
+	}
+
+	public static void rndHelloSota() {
 	}
 }
