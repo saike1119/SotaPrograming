@@ -1,5 +1,6 @@
 package jp.vstone.sotasample;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,8 +13,10 @@ import java.util.Random;
 
 import jp.vstone.RobotLib.CPlayWave;
 import jp.vstone.RobotLib.CRobotMem;
+import jp.vstone.RobotLib.CRobotPose;
 import jp.vstone.RobotLib.CRobotUtil;
 import jp.vstone.RobotLib.CSotaMotion;
+import jp.vstone.camera.CRoboCamera;
 import jp.vstone.sotatalk.SpeechRecog;
 import jp.vstone.sotatalk.TextToSpeechSota;
 
@@ -27,49 +30,108 @@ public class CommunicationSota {
 	// 話す内容のファイルを定義
 	private static final String wav_file = "./temp.wav";
 	private static boolean isGetWavFile = false;
+	static final int SMILE_POINT = 45;
 
 	// メイン
 	public static void main(String[] args) {
-		// 話題の番号をランダムで生成する
-		Random rnd = new Random();
-		int ran = rnd.nextInt(3) + 1;
+		CRobotUtil.Log(TAG, "Start " + TAG);
 
-		while (true) {
-			// 指定の挨拶がされるまでステイし続ける
-			rndHelloSota();
-			String hello = recog.getResponse(15000, 10);
-			if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
-				helloQuestionSota(hello);
-				String name = recog.getName(15000, 3);
-				if (name != null) {
-					helloNameSota(name);
-					// おしゃべりかおみくじを分岐選択
-					String select = recog.getResponse(15000, 100);
-					if (select.equals("おしゃべり")) {
-						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おしゃべりしよう！僕が聞きたいこと聞くね〜"), true);
-						// TODO:開発途中の話題
-						if (ran == 1) {
-							wadai1(name);
+		CRobotPose pose;
+		// VSMDと通信ソケット・メモリアクセス用クラス
+		CRobotMem mem = new CRobotMem();
+		// Sota用モーション制御クラス
+		CSotaMotion motion = new CSotaMotion(mem);
+
+		CRoboCamera cam = new CRoboCamera("/dev/video0", motion);
+
+		if (mem.Connect()) {
+			// Sota仕様にVSMDを初期化
+			motion.InitRobot_Sota();
+
+			CRobotUtil.Log(TAG, "Rev. " + mem.FirmwareRev.get());
+
+			// サーボモータを現在位置でトルクOnにする
+			CRobotUtil.Log(TAG, "Servo On");
+			motion.ServoOn();
+
+			// すべての軸を動作
+			pose = new CRobotPose();
+			pose.SetPose(new Byte[] { 1, 2, 3, 4, 5, 6, 7, 8 } // id
+					, new Short[] { 0, -900, 0, 900, 0, 0, 0, 0 } // target pos
+			);
+			// LEDを点灯（左目：赤、右目：赤、口：Max、電源ボタン：赤）
+			pose.setLED_Sota(Color.BLUE, Color.BLUE, 255, Color.GREEN);
+
+			motion.play(pose, 500);
+			CRobotUtil.wait(500);
+
+			while (true) {
+				// 指定の挨拶がされるまでステイし続ける
+				rndHelloSota();
+
+				// LEDだけ先に変更
+				pose.setLED_Sota(Color.ORANGE, Color.ORANGE, 255, Color.GREEN);
+				// playに任意のKeyを指定すると、
+				motion.play(pose, 100, "FACE_LED");
+
+				pose = new CRobotPose();
+				// 頭を動かさずに撮影する -> 頭の角度を指定しない
+				pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, 900, 0 });
+				motion.play(pose, 1000);
+
+				String hello = recog.getResponse(15000, 10);
+				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
+					pose = new CRobotPose();
+					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5, 6, 7, 8 } // id
+							, new Short[] { 0, -900, 0, 900, 0, 0, 0, 0 } // target
+																			// pos
+					);
+					pose.setLED_Sota(Color.BLUE, Color.BLUE, 255, Color.BLUE);
+					motion.play(pose, 1000);
+					helloQuestionSota(hello);
+					String name = recog.getName(15000, 3);
+					if (name != null) {
+						helloNameSota(name);
+						// おしゃべりかおみくじを分岐選択
+						String select = recog.getResponse(15000, 100);
+						if (select.equals("おしゃべり")) {
+							// 写真を取る前のポーズ＋音声
+							pose = new CRobotPose(); // @<BlockInfo>jp.vstone.block.pose,208,80,208,80,False,2,コメント@</BlockInfo>
+							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { -1, 71, -895, 1, 769 });
+							motion.play(pose, 1000);
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おしゃべりしよう！僕が聞きたいこと聞くね〜"), true);
+							// 話題の番号をランダムで生成する
+							Random rnd = new Random();
+							int wRan = rnd.nextInt(3) + 1;
+							// TODO:開発途中の話題
+							if (wRan == 1) {
+								wadai1(name);
+							}
+							// TODO:開発途中の話題
+							if (wRan == 2) {
+								wadai2();
+							}
+							// TODO:開発途中の話題
+							if (wRan == 3) {
+								wadai3();
+							}
 						}
-						// TODO:開発途中の話題
-						if (ran == 2) {
-							wadai2();
+						// おみくじ
+						if (select.equals("おみくじ")) {
+							omikuziSota();
 						}
-						// TODO:開発途中の話題
-						if (ran == 3) {
-							wadai3();
+						// おみくじ
+						if (select.equals("歌") || select.equals("うた") || select.equals("お歌") || select.equals("おうた")) {
+							pose = new CRobotPose();
+							// 頭を動かさずに撮影する -> 頭の角度を指定しない
+							// //@<BlockInfo>jp.vstone.block.pose,272,80,272,80,False,1,コメント@</BlockInfo>
+							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 1, 69, -21, 3, -35 });
+							motion.play(pose, 1000);
+							songSota();
 						}
+						// 会話終了
+						finishCommunication();
 					}
-					// おみくじ
-					if (select.equals("おみくじ")) {
-						omikuziSota();
-					}
-					// おみくじ
-					if (select.equals("歌") || select.equals("うた") || select.equals("お歌") || select.equals("おうた")) {
-						songSota();
-					}
-					// 会話終了
-					finishCommunication();
 				}
 			}
 		}
@@ -84,7 +146,7 @@ public class CommunicationSota {
 	public static void helloNameSota(String name) {
 		CRobotUtil.Log(TAG, name);
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんっていうんだね。よろしくね！"), true);
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりとおみくじと歌が歌えるけどできるけど、何したらいいかな？"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりとおみくじと歌が歌えるけど、何したらいいかな？"), true);
 	}
 
 	// TODO:開発途中のファンクション
@@ -158,19 +220,19 @@ public class CommunicationSota {
 	public static void omikuziSota() {
 		// 確率をランダムで生成する
 		Random rnd = new Random();
-		int ran = rnd.nextInt(100) + 1;
+		int oRan = rnd.nextInt(100) + 1;
 		// 出た数を表示
-		System.out.println(ran);
+		// System.out.println(ran);
 
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おみくじだね！"), true);
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("今からおみくじを僕の中で引くね！いいものが当たるといいね"), true);
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ガララララララララララララララララララ、ダン！"), true);
 
-		if (ran >= 80) {
+		if (oRan >= 80) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("吉"), true);
-		} else if (ran < 80 && ran >= 95) {
+		} else if (oRan < 80 && oRan >= 95) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("凶"), true);
-		} else if (ran < 95 && ran >= 100) {
+		} else if (oRan < 95 && oRan >= 100) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("大吉"), true);
 		}
 
@@ -336,7 +398,7 @@ public class CommunicationSota {
 	}
 
 	public static void songSota() {
-		CPlayWave.PlayWave("./sound/song.wav");
+		CPlayWave.PlayWave_wait("./sound/song.wav");
 	}
 
 	public static void rndHelloSota() {
