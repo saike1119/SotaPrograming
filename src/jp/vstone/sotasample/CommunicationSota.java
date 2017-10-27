@@ -59,24 +59,10 @@ public class CommunicationSota {
 			// LEDを点灯（左目：赤、右目：赤、口：Max、電源ボタン：赤）
 			pose.setLED_Sota(Color.ORANGE, Color.ORANGE, 255, Color.GREEN);
 
-			motion.play(pose, 500);
-			CRobotUtil.wait(500);
+			motion.play(pose, 100);
+			CRobotUtil.wait(100);
 
 			while (true) {
-				// LEDだけ先に変更
-				pose.setLED_Sota(Color.ORANGE, Color.ORANGE, 255, Color.GREEN);
-				// playに任意のKeyを指定すると、
-				motion.play(pose, 100, "FACE_LED");
-
-				pose = new CRobotPose();
-				pose.SetPose(new Byte[] { 1, 2, 3, 4, 5, 6, 7, 8 } // id
-						, new Short[] { 0, -900, 0, 900, 0, 0, 0, 0 } // target
-																		// pos
-				);
-				// LEDを点灯（左目：赤、右目：赤、口：Max、電源ボタン：赤）
-				pose.setLED_Sota(Color.BLUE, Color.BLUE, 255, Color.BLUE);
-				motion.play(pose, 1000);
-
 				// 指定の挨拶がされるまでステイし続ける
 				String hello = recog.getResponse(15000, 100);
 				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
@@ -112,15 +98,48 @@ public class CommunicationSota {
 						if (select.equals("おみくじ")) {
 							omikuziSota();
 						}
-						// おみくじ
+						// 歌う
 						if (select.equals("歌") || select.equals("うた") || select.equals("お歌") || select.equals("おうた")
-								|| select.equals("歌って")) {
+								|| select.equals("歌って") || select.equals("歌を歌って")) {
 							pose = new CRobotPose();
-							// 頭を動かさずに撮影する -> 頭の角度を指定しない
-							// //@<BlockInfo>jp.vstone.block.pose,272,80,272,80,False,1,コメント@</BlockInfo>
-							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 1, 69, -21, 3, -35 });
+							// 手を挙げる
+							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 69, -21, 3, -35 });
 							motion.play(pose, 1000);
-							songSota();
+							CRobotUtil.wait(100);
+							// songSota();
+							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, 180, 0 });
+							motion.play(pose, 1000);
+							CRobotUtil.wait(100);
+							// 初期化
+							pose = new CRobotPose();
+							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5, 6, 7, 8 } // id
+									, new Short[] { 0, -900, 0, 900, 0, 0, 0, 0 } // target
+																					// pos
+							);
+							// LEDを点灯（左目：赤、右目：赤、口：Max、電源ボタン：赤）
+							pose.setLED_Sota(Color.ORANGE, Color.ORANGE, 255, Color.GREEN);
+							motion.play(pose, 100);
+							CRobotUtil.wait(100);
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("test"), true);
+							// 一部の軸を指定して動作
+							// CSotaMotionの定数を利用してID指定する場合
+							pose = new CRobotPose();
+							pose.SetPose(
+									new Byte[] { CSotaMotion.SV_HEAD_R, CSotaMotion.SV_L_SHOULDER,
+											CSotaMotion.SV_L_ELBOW, CSotaMotion.SV_R_ELBOW } // id
+									, new Short[] { 200, 700, -200, 200 } // target
+																			// pos
+							);
+							motion.play(pose, 1000);
+							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("test"), true);
+							pose = new CRobotPose();
+							pose.SetPose(
+									new Byte[] { CSotaMotion.SV_HEAD_R, CSotaMotion.SV_L_SHOULDER,
+											CSotaMotion.SV_L_ELBOW, CSotaMotion.SV_R_ELBOW } // id
+									, new Short[] { 200, 700, -200, 200 } // target
+																			// pos
+							);
+							motion.play(pose, 1000);
 						}
 						// 会話終了
 						finishCommunication();
