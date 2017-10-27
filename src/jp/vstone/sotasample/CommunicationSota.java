@@ -80,8 +80,8 @@ public class CommunicationSota {
 						CRobotUtil.wait(100);
 						helloNameSota(name);
 						// おしゃべりかおみくじを分岐選択
-						String select = recog.getResponse(15000, 100);
-						if (select.equals("おしゃべり")) {
+						String contains = recog.getResponse(15000, 100);
+						if (contains.equals("おしゃべり")) {
 							// 右手を挙げるポーズ
 							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, -800, 0 });
 							motion.play(pose, 1000);
@@ -104,27 +104,28 @@ public class CommunicationSota {
 							}
 						}
 						// おみくじ
-						if (select.equals("おみくじ")) {
+						if (contains.equals("おみくじ")) {
 							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
 							motion.play(pose, 1000);
 							CRobotUtil.wait(100);
 							omikuziSota();
 						}
 						// 歌う
-						if (select.equals("歌") || select.equals("うた") || select.equals("お歌") || select.equals("おうた")
-								|| select.equals("歌って") || select.equals("歌を歌って")) {
+						if (contains.equals("歌") || contains.equals("うた") || contains.equals("お歌")
+								|| contains.equals("おうた") || contains.equals("歌って") || contains.equals("歌を歌って")) {
 							// 両手を広げるポーズ
 							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
 							motion.play(pose, 1000);
 							CRobotUtil.wait(100);
 							songSota();
 						}
-						if (select.equals("ニュース")||select.equals("にゅーす")||select.equals("ヤフー")||select.equals("やふー")) {
+						if (contains.contains("ヤフー")) {
 							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
 							motion.play(pose, 1000);
 							CRobotUtil.wait(100);
 							speechYahooNews();
 						}
+						// if(contains.contains(""));
 						// 会話終了
 						finishCommunication();
 						// 全ての軸を初期化
@@ -403,7 +404,7 @@ public class CommunicationSota {
 	}
 
 	public static void songSota() {
-		CPlayWave.PlayWave_wait("./sound/song.wav");
+		CPlayWave.PlayWave_wait("./sound/song_short.wav");
 	}
 
 	public static void rndHelloSota() {
