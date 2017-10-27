@@ -80,8 +80,8 @@ public class CommunicationSota {
 						CRobotUtil.wait(100);
 						helloNameSota(name);
 						// おしゃべりかおみくじを分岐選択
-						String contains = recog.getResponse(15000, 100);
-						if (contains.contains("おしゃべり")) {
+						String select = recog.getResponse(15000, 100);
+						if (select.contains("しゃべり")) {
 							// 右手を挙げるポーズ
 							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, -800, 0 });
 							motion.play(pose, 1000);
@@ -104,29 +104,27 @@ public class CommunicationSota {
 							}
 						}
 						// おみくじ
-						if (contains.contains("おみくじ")) {
+						if (select.contains("おみくじ") || select.contains("みくじ")) {
 							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
 							motion.play(pose, 1000);
 							CRobotUtil.wait(100);
 							omikuziSota();
 						}
 						// 歌う
-						if (contains.contains("歌") || contains.contains("うた") || contains.contains("お歌")
-								|| contains.contains("おうた") || contains.contains("歌って") || contains.contains("歌を歌って")) {
+						if (select.contains("歌") || select.contains("うた") || select.contains("唄")) {
 							// 両手を広げるポーズ
 							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
 							motion.play(pose, 1000);
 							CRobotUtil.wait(100);
 							songSota();
 						}
-						if (contains.contains("ヤフー")) {
+						if (select.contains("ヤフー") || select.contains("ニュース") || select.contains("読み上げ")
+								|| select.contains("ｙａｈｏｏ")) {
 							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
 							motion.play(pose, 1000);
 							CRobotUtil.wait(100);
 							speechYahooNews();
 						}
-						// if(contains.contains(""));
-						// 会話終了
 						finishCommunication();
 						// 全ての軸を初期化
 						pose = new CRobotPose();
@@ -160,7 +158,7 @@ public class CommunicationSota {
 			CRobotUtil.Log(TAG, food);
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんは" + food + "が好きなんだね"), true);
 			// 寿司ルート
-			if (food.contains("魚") || food.contains("おさかな") || food.contains("オサカナ")) {
+			if (food.contains("魚") || food.contains("さかな") || food.contains("サカナ")) {
 				CRobotUtil.Log(TAG, food);
 				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕もだよ、お寿司美味しいよね〜"), true);
 				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("マグロかシメサバだったらどっちが好き？"), true);
@@ -244,7 +242,7 @@ public class CommunicationSota {
 	}
 
 	public static void finishCommunication() {
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあ、またね〜〜〜！"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("じゃあ、またね〜！"), true);
 	}
 
 	/*
@@ -404,7 +402,9 @@ public class CommunicationSota {
 	}
 
 	public static void songSota() {
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("それじゃあ、歌うね！おっほん！"), true);
 		CPlayWave.PlayWave_wait("./sound/song_short.wav");
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("どうだったかな〜？うまいでしょ〜？"), true);
 	}
 
 	public static void rndHelloSota() {
