@@ -47,7 +47,7 @@ public class Senden {
 			CRobotUtil.wait(100);
 			while (true) {
 				try {
-					Thread.sleep(3000);
+					Thread.sleep(30000);
 					rndHelloSota();
 					pose = new CRobotPose();
 					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, 900, 0 });
