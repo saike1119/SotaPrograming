@@ -231,9 +231,11 @@ public class CommunicationSota {
 
 		if (oRan >= 80) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("吉"), true);
-		} else if (oRan < 80 && oRan >= 95) {
+		}
+		if (oRan < 80 && oRan >= 95) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("凶"), true);
-		} else if (oRan < 95 && oRan >= 100) {
+		}
+		if (oRan < 95 && oRan >= 100) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("大吉"), true);
 		}
 
