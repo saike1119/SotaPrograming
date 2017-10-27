@@ -60,34 +60,29 @@ public class CommunicationSota {
 					, new Short[] { 0, -900, 0, 900, 0, 0, 0, 0 } // target pos
 			);
 			// LEDを点灯（左目：赤、右目：赤、口：Max、電源ボタン：赤）
-			pose.setLED_Sota(Color.BLUE, Color.BLUE, 255, Color.GREEN);
+			pose.setLED_Sota(Color.ORANGE, Color.ORANGE, 255, Color.GREEN);
 
 			motion.play(pose, 500);
 			CRobotUtil.wait(500);
 
 			while (true) {
-				// 指定の挨拶がされるまでステイし続ける
-				rndHelloSota();
-
 				// LEDだけ先に変更
 				pose.setLED_Sota(Color.ORANGE, Color.ORANGE, 255, Color.GREEN);
 				// playに任意のKeyを指定すると、
 				motion.play(pose, 100, "FACE_LED");
 
 				pose = new CRobotPose();
-				// 頭を動かさずに撮影する -> 頭の角度を指定しない
-				pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, 900, 0 });
+				pose.SetPose(new Byte[] { 1, 2, 3, 4, 5, 6, 7, 8 } // id
+						, new Short[] { 0, -900, 0, 900, 0, 0, 0, 0 } // target
+																		// pos
+				);
+				// LEDを点灯（左目：赤、右目：赤、口：Max、電源ボタン：赤）
+				pose.setLED_Sota(Color.BLUE, Color.BLUE, 255, Color.BLUE);
 				motion.play(pose, 1000);
 
-				String hello = recog.getResponse(15000, 10);
+				// 指定の挨拶がされるまでステイし続ける
+				String hello = recog.getResponse(15000, 100);
 				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
-					pose = new CRobotPose();
-					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5, 6, 7, 8 } // id
-							, new Short[] { 0, -900, 0, 900, 0, 0, 0, 0 } // target
-																			// pos
-					);
-					pose.setLED_Sota(Color.BLUE, Color.BLUE, 255, Color.BLUE);
-					motion.play(pose, 1000);
 					helloQuestionSota(hello);
 					String name = recog.getName(15000, 3);
 					if (name != null) {
@@ -121,7 +116,8 @@ public class CommunicationSota {
 							omikuziSota();
 						}
 						// おみくじ
-						if (select.equals("歌") || select.equals("うた") || select.equals("お歌") || select.equals("おうた")) {
+						if (select.equals("歌") || select.equals("うた") || select.equals("お歌") || select.equals("おうた")
+								|| select.equals("歌って")) {
 							pose = new CRobotPose();
 							// 頭を動かさずに撮影する -> 頭の角度を指定しない
 							// //@<BlockInfo>jp.vstone.block.pose,272,80,272,80,False,1,コメント@</BlockInfo>
@@ -131,7 +127,12 @@ public class CommunicationSota {
 						}
 						// 会話終了
 						finishCommunication();
+						motion.ServoOff();
 					}
+				}
+				if (hello.equals("宣伝") || hello.equals("せんでん")) {
+					rndHelloSota();
+
 				}
 			}
 		}
@@ -402,5 +403,6 @@ public class CommunicationSota {
 	}
 
 	public static void rndHelloSota() {
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("こんにちは〜〜！こちらぬるつーブースです。ゆっくりしていってね！"), true);
 	}
 }
