@@ -16,7 +16,6 @@ import jp.vstone.RobotLib.CRobotMem;
 import jp.vstone.RobotLib.CRobotPose;
 import jp.vstone.RobotLib.CRobotUtil;
 import jp.vstone.RobotLib.CSotaMotion;
-import jp.vstone.camera.CRoboCamera;
 import jp.vstone.sotatalk.SpeechRecog;
 import jp.vstone.sotatalk.TextToSpeechSota;
 
@@ -41,8 +40,6 @@ public class CommunicationSota {
 		CRobotMem mem = new CRobotMem();
 		// Sota用モーション制御クラス
 		CSotaMotion motion = new CSotaMotion(mem);
-
-		CRoboCamera cam = new CRoboCamera("/dev/video0", motion);
 
 		if (mem.Connect()) {
 			// Sota仕様にVSMDを初期化
@@ -81,7 +78,7 @@ public class CommunicationSota {
 				motion.play(pose, 1000);
 
 				// 指定の挨拶がされるまでステイし続ける
-				String hello = recog.getResponse(15000, 100);
+				String hello = recog.getResponse(150000, 100);
 				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
 					helloQuestionSota(hello);
 					String name = recog.getName(15000, 3);
@@ -130,10 +127,7 @@ public class CommunicationSota {
 						motion.ServoOff();
 					}
 				}
-				if (hello.equals("宣伝") || hello.equals("せんでん")) {
-					rndHelloSota();
-
-				}
+				rndHelloSota();
 			}
 		}
 	}
