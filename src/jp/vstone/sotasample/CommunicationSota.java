@@ -78,7 +78,7 @@ public class CommunicationSota {
 				motion.play(pose, 1000);
 
 				// 指定の挨拶がされるまでステイし続ける
-				String hello = recog.getResponse(150000, 100);
+				String hello = recog.getResponse(15000, 100);
 				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
 					helloQuestionSota(hello);
 					String name = recog.getName(15000, 3);
@@ -127,7 +127,6 @@ public class CommunicationSota {
 						motion.ServoOff();
 					}
 				}
-				rndHelloSota();
 			}
 		}
 	}
