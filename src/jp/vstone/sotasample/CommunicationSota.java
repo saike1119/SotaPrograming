@@ -29,7 +29,6 @@ public class CommunicationSota {
 	// 話す内容のファイルを定義
 	private static final String wav_file = "./temp.wav";
 	private static boolean isGetWavFile = false;
-	private static CRobotPose pose;
 	static final int SMILE_POINT = 45;
 
 	// メイン
@@ -78,7 +77,7 @@ public class CommunicationSota {
 						// 左手を挙げるポーズ
 						pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 800, 0, 900, 0 });
 						motion.play(pose, 1000);
-						CRobotUtil.wait(1000);
+						CRobotUtil.wait(100);
 						helloNameSota(name);
 						// おしゃべりかおみくじを分岐選択
 						String select = recog.getResponse(15000, 100);
@@ -86,7 +85,7 @@ public class CommunicationSota {
 							// 右手を挙げるポーズ
 							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, -800, 0 });
 							motion.play(pose, 1000);
-							CRobotUtil.wait(1000);
+							CRobotUtil.wait(100);
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おしゃべりしよう！僕が聞きたいこと聞くね〜"), true);
 							// 話題の番号をランダムで生成する
 							Random rnd = new Random();
@@ -106,6 +105,9 @@ public class CommunicationSota {
 						}
 						// おみくじ
 						if (select.equals("おみくじ")) {
+							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
+							motion.play(pose, 1000);
+							CRobotUtil.wait(100);
 							omikuziSota();
 						}
 						// 歌う
@@ -117,13 +119,19 @@ public class CommunicationSota {
 							CRobotUtil.wait(100);
 							songSota();
 						}
+						if (select.equals("ニュース")||select.equals("にゅーす")||select.equals("ヤフー")||select.equals("やふー")) {
+							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
+							motion.play(pose, 1000);
+							CRobotUtil.wait(100);
+							speechYahooNews();
+						}
 						// 会話終了
 						finishCommunication();
 						// 全ての軸を初期化
 						pose = new CRobotPose();
 						pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, 900, 0, });
 						motion.play(pose, 1000);
-						CRobotUtil.wait(5000);
+						CRobotUtil.wait(100);
 					}
 				}
 			}
@@ -139,7 +147,7 @@ public class CommunicationSota {
 	public static void helloNameSota(String name) {
 		CRobotUtil.Log(TAG, name);
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんっていうんだね。よろしくね！"), true);
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりとおみくじと歌が歌えるけど、何したらいいかな？"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりとおみくじとヤフーニュース読み上げと歌が歌えるけど、何したらいいかな〜？"), true);
 	}
 
 	// TODO:開発途中のファンクション
@@ -220,9 +228,6 @@ public class CommunicationSota {
 		Random rnd = new Random();
 		int oRan = rnd.nextInt(100) + 1;
 		// 両手を広げるポーズ
-		pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
-		motion.play(pose, 1000);
-		CRobotUtil.wait(100);
 
 		if (oRan <= 80) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("吉"), true);
@@ -385,13 +390,15 @@ public class CommunicationSota {
 		}
 	}
 
-	public static void getTextSpeech() {
-		String getText_url = "http://133.130.107.245/temp.txt";
+	public static void speechYahooNews() {
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("今、頑張って最新のヤフーニュースを覚えているよ！ちょっと待ってね。"), true);
+		String getText_url = "http://133.130.107.245/sota.txt";
 		String speech_text = "テキスト取得，エラーです";
 
 		speech_text = getStringByCallGET(getText_url);
 		if (speech_text != null) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(speech_text), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("終わりだよ！色々なことがあるね〜！ニュースって面白いね！"), true);
 		}
 	}
 
