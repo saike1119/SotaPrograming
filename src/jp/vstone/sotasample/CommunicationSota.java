@@ -29,6 +29,7 @@ public class CommunicationSota {
 	// 話す内容のファイルを定義
 	private static final String wav_file = "./temp.wav";
 	private static boolean isGetWavFile = false;
+	private static CRobotPose pose;
 	static final int SMILE_POINT = 45;
 
 	// メイン
@@ -67,14 +68,14 @@ public class CommunicationSota {
 				String hello = recog.getResponse(15000, 100);
 				if (hello.equals("こんにちは") || hello.equals("こんばんは") || hello.equals("おはよう")) {
 					// 可愛いポーズ
-					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, -900, -180, 900 });
+					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, -850, -180, 850 });
 					motion.play(pose, 1000);
 					CRobotUtil.wait(100);
 					helloQuestionSota(hello);
 
 					String name = recog.getName(15000, 100);
 					if (name != null) {
-						// 可愛いポーズ
+						// 左手を挙げるポーズ
 						pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 800, 0, 900, 0 });
 						motion.play(pose, 1000);
 						CRobotUtil.wait(1000);
@@ -82,10 +83,10 @@ public class CommunicationSota {
 						// おしゃべりかおみくじを分岐選択
 						String select = recog.getResponse(15000, 100);
 						if (select.equals("おしゃべり")) {
-							// 写真を取る前のポーズ＋音声
-							pose = new CRobotPose(); // @<BlockInfo>jp.vstone.block.pose,208,80,208,80,False,2,コメント@</BlockInfo>
-							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { -1, 71, -895, 1, 769 });
+							// 右手を挙げるポーズ
+							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, -800, 0 });
 							motion.play(pose, 1000);
+							CRobotUtil.wait(1000);
 							CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おっけー！おしゃべりしよう！僕が聞きたいこと聞くね〜"), true);
 							// 話題の番号をランダムで生成する
 							Random rnd = new Random();
@@ -110,6 +111,7 @@ public class CommunicationSota {
 						// 歌う
 						if (select.equals("歌") || select.equals("うた") || select.equals("お歌") || select.equals("おうた")
 								|| select.equals("歌って") || select.equals("歌を歌って")) {
+							// 両手を広げるポーズ
 							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
 							motion.play(pose, 1000);
 							CRobotUtil.wait(100);
@@ -119,10 +121,7 @@ public class CommunicationSota {
 						finishCommunication();
 						// 全ての軸を初期化
 						pose = new CRobotPose();
-						pose.SetPose(new Byte[] { 1, 2, 3, 4, 5, 6, 7, 8 } // id
-								, new Short[] { 0, -900, 0, 900, 0, 0, 0, 0 } // target
-																				// pos
-						);
+						pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, 900, 0, });
 						motion.play(pose, 1000);
 						CRobotUtil.wait(5000);
 					}
@@ -217,10 +216,13 @@ public class CommunicationSota {
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("今からおみくじを僕の中で引くね！いいものが当たるといいね"), true);
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ガララララララララララララララララララ、ダン！"), true);
 
-
 		// 確率をランダムで生成する
 		Random rnd = new Random();
 		int oRan = rnd.nextInt(100) + 1;
+		// 両手を広げるポーズ
+		pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
+		motion.play(pose, 1000);
+		CRobotUtil.wait(100);
 
 		if (oRan <= 80) {
 			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("吉"), true);
