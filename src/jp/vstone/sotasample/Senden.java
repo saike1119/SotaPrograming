@@ -38,19 +38,22 @@ public class Senden {
 			// LEDを点灯（左目：赤、右目：赤、口：Max、電源ボタン：赤）
 			pose.setLED_Sota(Color.BLUE, Color.BLUE, 255, Color.BLUE);
 
-			motion.play(pose, 100);
-			CRobotUtil.wait(100);
-
-			// 右手を挙げるポーズ
-			pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, -800, 0 });
 			motion.play(pose, 1000);
-			CRobotUtil.wait(100);
+			CRobotUtil.wait(1000);
 			while (true) {
 				try {
 					Thread.sleep(30000);
+					// 右手を挙げるポーズ
+					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, -800, 0 });
+					motion.play(pose, 1000);
+					CRobotUtil.wait(1000);
 					rndHelloSota();
-					pose = new CRobotPose();
-					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, -900, 0, 900, 0 });
+					Thread.sleep(30000);
+					// 左手を挙げるポーズ
+					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 800, 0, 900, 0 });
+					motion.play(pose, 1000);
+					CRobotUtil.wait(1000);
+					rndHelloSota();
 				} catch (InterruptedException e) {
 					// TODO 自動生成された catch ブロック
 					e.printStackTrace();

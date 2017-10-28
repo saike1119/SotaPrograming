@@ -65,7 +65,10 @@ public class CommunicationSota {
 			while (true) {
 				// 指定の挨拶がされるまでステイし続ける
 				String hello = recog.getResponse(15000, 100);
-				if (hello.contains("こんにちは") || hello.contains("こんばんは") || hello.contains("おはよう")) {
+				if (hello.contains("こんにちは") || hello.contains("こんばんは") || hello.contains("おはよ")
+						|| hello.contains("ハロー")) {
+					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("hello world"), true);
+
 					// 可愛いポーズ
 					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, -850, -180, 850 });
 					motion.play(pose, 1000);
@@ -100,11 +103,11 @@ public class CommunicationSota {
 							}
 							// TODO:開発途中の話題
 							if (wRan == 3) {
-								wadai3();
+								wadai2();
 							}
 						}
 						// おみくじ
-						if (select.contains("おみくじ") || select.contains("みくじ")) {
+						if (select.contains("おみくじ") || select.contains("くじ")) {
 							pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, 0, -180, 0 });
 							motion.play(pose, 1000);
 							CRobotUtil.wait(100);
@@ -146,60 +149,66 @@ public class CommunicationSota {
 	public static void helloNameSota(String name) {
 		CRobotUtil.Log(TAG, name);
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんっていうんだね。よろしくね！"), true);
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりとおみくじとヤフーニュース読み上げと歌が歌えるけど、何したらいいかな〜？"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕はおしゃべりと、おみくじと、ヤフーニュース読み上げと、歌が歌えるけど、何をしたらいいかな〜？"), true);
 	}
 
 	// TODO:開発途中のファンクション
 	public static void wadai1(String name) {
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ちなみにお肉とお魚、どっちが好き？"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ちなみに焼肉と寿司、どっちが好き？"), true);
 		String food = recog.getResponse(15000, 100);
-		// 焼肉か寿司か分岐点
-		if (food != null) {
+		CRobotUtil.Log(TAG, food);
+		// 寿司ルート
+		if (food.contains("寿司") || food.contains("すし")) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんはお寿司が好きなんだね"), true);
 			CRobotUtil.Log(TAG, food);
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんは" + food + "が好きなんだね"), true);
-			// 寿司ルート
-			if (food.contains("魚") || food.contains("さかな") || food.contains("サカナ")) {
-				CRobotUtil.Log(TAG, food);
-				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕もだよ、お寿司美味しいよね〜"), true);
-				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("マグロかシメサバだったらどっちが好き？"), true);
-				String neta = recog.getResponse(15000, 100);
-				// ネタ分岐
-				if (food.contains("マグロ")) {
-					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("王道だね！"), true);
-					CRobotUtil.Log(TAG, neta);
-				}
-				if (food.contains("しめさば")) {
-					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("渋いね〜"), true);
-					CRobotUtil.Log(TAG, neta);
-				} else {
-					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("それも美味しそうだね"), true);
-					CRobotUtil.Log(TAG, neta);
-				}
-
-				// 焼肉ルート
-			} else if (food.contains("肉") || food.contains("おにく") || food.contains("オニク")) {
-				CRobotUtil.Log(TAG, food);
-				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("焼肉いいよね"), true);
-				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("茅ヶ崎駅に、ざんまいっていう美味しい焼肉屋さんがあるよ"), true);
-				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ぜひ、行ってみて！"), true);
-
-				// そのほかの食べ物を答えたとき
-			} else {
-				CRobotUtil.Log(TAG, food);
-				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(food + "って食べ物があるの知らなかったよ、美味しそうだね。"), true);
-				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ありがとう！"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕もだよ、お寿司美味しいよね〜"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("マグロかサーモンだったらどっちが好き？"), true);
+			String neta = recog.getResponse(15000, 100);
+			// ネタ分岐
+			if (food.contains("マグロ") || food.contains("まぐろ")) {
+				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("王道だね！僕もまぐろ大好きだよ〜！"), true);
+				CRobotUtil.Log(TAG, neta);
+			}
+			if (food.contains("サーモン") || food.contains("さーもん")) {
+				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("サーモン！美味しいよね！脂乗ってて最高だよね！"), true);
+				CRobotUtil.Log(TAG, neta);
 			}
 		}
+
+		// 焼肉ルート
+		if (food.contains("肉") || food.contains("にく")) {
+			CRobotUtil.Log(TAG, food);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(name + "さんは焼肉が好きなんだね"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("焼肉いいよね！"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("茅ヶ崎駅にと湘南台駅に、ざんまいっていう美味しい焼肉屋さんがあるよ！安くていっぱい食べれるんだよ！"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("サラダもたくさんでいつもお腹いっぱいになっちゃうんだよ〜！"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ぜひ、行ってみてね！"), true);
+		}
+
 	}
 
 	// TODO:開発途中のファンクション
 	public static void wadai2() {
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("最近はちゃんと寝てる？？"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("文化祭はどう〜？楽しんでる？？"), true);
 
-		String geinou = recog.getResponse(15000, 100);
-		if (geinou != null) {
-			CRobotUtil.Log(TAG, geinou);
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("夜はちゃんと寝たほうがいいいよ〜。おやすみ！"), true);
+		String festival = recog.getResponse(15000, 100);
+		if (festival.contains("うん") || festival.contains("はい") || festival.contains("楽しん") || festival.contains("でる")) {
+			CRobotUtil.Log(TAG, festival);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("わーい！よかった！ぬるつーぶーすではもう遊んでみた？"), true);
+			String yesorno = recog.getResponse(15000, 100);
+			if (yesorno.contains("うん") || yesorno.contains("はい") || yesorno.contains("みた")) {
+				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ありがとうね！楽しい展示作品いっぱいあったでしょ〜？また来年もきてね！！"), true);
+			}
+			if (yesorno.contains("いいえ") || yesorno.contains("まだ") || yesorno.contains("これから")
+					|| yesorno.contains("ない")) {
+				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("楽しい展示作品いっぱいあるからまわってみて！！！"), true);
+				CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕との約束だよ〜〜〜！"), true);
+			}
+		}
+		if (festival.contains("いいえ") || festival.contains("まだ") || festival.contains("これから") || festival.contains("遊んで")
+				|| festival.contains("ない")) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("楽しい展示作品いっぱいあるからまわってみて！！！"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("僕との約束だよ〜〜〜！"), true);
 		}
 	}
 
