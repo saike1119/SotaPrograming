@@ -49,6 +49,12 @@ public class Senden {
 					CRobotUtil.wait(1000);
 					rndHelloSota();
 					Thread.sleep(30000);
+					// 歌をうたう
+					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 800, 0, 900, 0 });
+					motion.play(pose, 1000);
+					CRobotUtil.wait(1000);
+					songSota();
+					Thread.sleep(30000);
 					// 左手を挙げるポーズ
 					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 800, 0, 900, 0 });
 					motion.play(pose, 1000);
@@ -65,5 +71,11 @@ public class Senden {
 	// functions
 	public static void rndHelloSota() {
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("こんにちは〜〜！こちらぬるつーブースです。ゆっくりしていってね！"), true);
+	}
+
+	public static void songSota() {
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(""), true);
+		CPlayWave.PlayWave_wait("./sound/song.wav");
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ぬるつーえっくすにようこそ！"), true);
 	}
 }

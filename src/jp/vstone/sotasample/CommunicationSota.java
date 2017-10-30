@@ -67,8 +67,6 @@ public class CommunicationSota {
 				String hello = recog.getResponse(15000, 100);
 				if (hello.contains("こんにちは") || hello.contains("こんばんは") || hello.contains("おはよ")
 						|| hello.contains("ハロー")) {
-					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("hello world"), true);
-
 					// 可愛いポーズ
 					pose.SetPose(new Byte[] { 1, 2, 3, 4, 5 }, new Short[] { 0, 180, -850, -180, 850 });
 					motion.play(pose, 1000);
@@ -214,12 +212,14 @@ public class CommunicationSota {
 
 	// TODO:開発途中のファンクション
 	public static void wadai3() {
-		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("アンドロイドとアイフォンどっち使ってる？"), true);
+		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ゲームは好きかな？"), true);
 
-		String sumaho = recog.getResponse(15000, 100);
-		if (sumaho != null) {
-			CRobotUtil.Log(TAG, sumaho);
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(sumaho + "を使ってるんだね。いいね！"), true);
+		String example = recog.getResponse(15000, 100);
+		if (example.contains("うん") || example.contains("はい")) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ゲーム楽しいよね。良いね。"), true);
+		}
+		if (example.contains("いいえ") || example.contains("違う")) {
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("ゲーム楽しいよ。遊んでいってね。"), true);
 		}
 	}
 
@@ -238,13 +238,13 @@ public class CommunicationSota {
 		// 両手を広げるポーズ
 
 		if (oRan <= 80) {
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("吉"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("大吉だよ！"), true);
 		}
 		if (oRan > 80 && oRan <= 95) {
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("凶"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("吉だよ！"), true);
 		}
 		if (oRan > 95 && oRan <= 100) {
-			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("大吉"), true);
+			CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("凶だよ！"), true);
 		}
 
 		CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("おめでとう〜〜！また来年も来てね"), true);
